@@ -11,11 +11,13 @@
   </div>
   <div class="nav-content"></div>
   <div class="nav-footer">
+    <div class="link-button"><a href="/write/book"">책 등록하기</a></div>
     <div class="link-button">
       <%= username %>
     </div>
-    <div class="link-button"><a href="/<%= loginHref %>">
-        <%= loginHref %>
-      </a></div>
+    <div class="link-button"><a href="/<%= loggedIn ? " logout" : "login" %>">
+        <%= loggedIn ? "로그아웃" : "로그인" %>
+      </a>
+    </div>
   </div>
 </div>

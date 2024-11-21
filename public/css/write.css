@@ -176,10 +176,10 @@ input::placeholder, textarea::placeholder {
   padding: 10px;
 }
 
-#image-previe {
+#image-preview {
   display:none;
   margin-top: 10px;
-  max-height: 150px;
+  max-height: 600px;
 }
 
 select {

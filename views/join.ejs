@@ -1,8 +1,30 @@
 <% layout('layouts/layout') %>
-<form action="/join" method="POST">
-  <input type="text" name="username" placeholder="이름">
-  <input type="text" name="email" placeholder="이메일">
-  <input type="text" name="password" placeholder="비밀번호">
-  <input type="submit" value="회원가입"></input>
-</form>
-<a href="/login">로그인</a>
+<header>
+  <h1>회원가입</h1>
+</header>
+
+<link rel="stylesheet" href="/css/login.css">
+<div class="container">
+  <form action="/join" method="POST" class="login-form">
+    <div class="form-group">
+      <label for="">이름</label>
+      <input type="text" id="email" name="username" placeholder="이름을 입력하세요" required>
+    </div>
+
+      <div class="form-group">
+          <label for="email">이메일</label>
+          <input type="text" id="email" name="email" placeholder="이메일을 입력하세요" required>
+      </div>
+
+      <div class="form-group">
+          <label for="password">비밀번호</label>
+          <input type="password" id="password" name="password" placeholder="비밀번호를 입력하세요" required>
+      </div>
+
+      <button type="submit" class="submit-btn">회원가입</button>
+
+      <div class="signup-link">
+          <p>계정이 이미 있나요? <a href="/login">로그인</a></p>
+      </div>
+  </form>
+</div>

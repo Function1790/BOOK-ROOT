@@ -85,15 +85,17 @@ function isEmpty(array) {
 
 //<----------Web---------->
 app.use((req, res, next) => {
-    res.locals.loginHref = req.session.loggedIn ? 'logout' : 'login';
-    res.locals.username = req.session?.username || 'not';
+    res.locals.loggedIn = req.session.loggedIn;
+    res.locals.username = req.session?.username || '';
     next();
 });
 
 app.get('/', async (req, res) => {
     const sqlResult = await sqlQuery(`select * from books`);
+    const top3 = await sqlQuery(`select * from books order by sold_count desc limit 3;`);
     res.render('index', {
-        books: sqlResult
+        books: sqlResult,
+        top3: top3
     });
 });
 
@@ -184,6 +186,43 @@ app.post('/write/book', upload.single('image_path'), async (req, res, next) => {
         return;
     }
     var query = `insert into books (title, author, category_id, price, description, image_path) values `
+    query += `('${title}', '${author}', ${category_id}, ${price}, '${description}', '${originalname}')`
+    await sqlQuery(query)
+    res.redirect("/");
+    Log("Write", `'${title}'이라는 제목의 책을 등록하였습니다.`)
+})
+
+app.get('/update/book/:id', async (req, res) => {
+    //TODO: 권한
+    const bookId = req.params.id;
+    const sqlResult = await sqlQuery(`select * from books where book_id=${bookId}`);
+    if (isEmpty(sqlResult)) {
+        res.redirect('/');
+        return;
+    }
+
+    const book = sqlResult[0];
+    const categories = await sqlQuery(`select * from categories`);
+    res.render("update", {
+        categories: categories,
+        book: book
+    })
+});
+
+app.post('/update/book/:id', upload.single('image_path'), async (req, res, next) => {
+    //TODO: 권한
+    const { originalname, filename, size } = req.file;
+    const body = req.body;
+    const [title, author, category_id, price, description] =
+        [body.title, body.author, body.category_id, body.price, body.description];
+    const isUndefined = !title || !author || !category_id || !price || !description;
+    if (isUndefined || !originalname) {
+        res.redirect("/write/book");
+        return;
+    }
+
+    //TODO: 이부분 완성하기
+    var query = `up into books (title, author, category_id, price, description, image_path) values `
     query += `('${title}', '${author}', ${category_id}, ${price}, '${description}', '${originalname}')`
     await sqlQuery(query)
     res.redirect("/");

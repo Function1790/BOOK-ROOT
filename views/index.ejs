@@ -1,26 +1,67 @@
 <% layout('layouts/layout') %>
-  <link rel="stylesheet" href="/css/index.css">
-  <header>
-    <h1>책 목록</h1>
+  <link rel="stylesheet" href="/css/index.css" />
+  <header class="header">
+    <div class="header-content">
+      <h1>TOP 3</h1>
+    </div>
   </header>
-  <main class="book-list">
-    <% books.forEach(book=> { %>
-
-      <div class="book-card">
+  <div class="book-container">
+    <section class="book-section">
+      <% top3.forEach(book=> { %>
+        <div class="book-card">
           <a href="/book/<%= book.book_id %>">
-            <img src="<%= book.image_path ? '/img/'+book.image_path : 'error-book.png' %>" alt="책 이미지"
-              class="book-image">
-            <div class="book-details">
-              <h2 class="book-title">
+            <img src="<%= '/img/'+book.image_path %>" alt="책 이미지" class="book-image">
+            <div class="book-info">
+              <h3 class="book-title">
                 <%= book.title %>
-              </h2>
-              <p class="book-author">저자: <%= book.author %>
+              </h3>
+              <p class="book-author">
+                <%= book.author %>
               </p>
-              <p class="book-price">₩ <%= book.price %>
+              <p class="book-price">
+                <span class="current-price">
+                  <%= book.price %>원
+                </span>
               </p>
+            </div>
           </a>
-      </div>
+        </div>
+        <% }); %>
+    </section>
+  </div>
 
-      </div>
-      <% }); %>
-  </main>
+  <header class="header">
+    <div class="header-content">
+      <h1>ALL</h1>
+    </div>
+  </header>
+  <div class="book-container">
+    <section class="book-section">
+      <% books.forEach(book=> { %>
+
+        <div class="book-card">
+          <a href="/book/<%= book.book_id %>">
+            <img src="<%= '/img/'+book.image_path %>" alt="책 이미지" class="book-image">
+            <div class="book-info">
+              <h3 class="book-title">
+                <%= book.title %>
+              </h3>
+              <p class="book-author">
+                <%= book.author %>
+              </p>
+              <p class="book-price">
+                <span class="current-price">
+                  <%= book.price %>원
+                </span>
+              </p>
+            </div>
+          </a>
+        </div>
+
+        <% }); %>
+    </section>
+  </div>
+
+  <footer class="footer">
+    <p>© 2024 Book Root</p>
+  </footer>
