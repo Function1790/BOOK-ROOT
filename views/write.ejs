@@ -1,0 +1,65 @@
+<% layout('layouts/layout') %>
+  <link rel="stylesheet" href="/css/write.css">
+  <header>
+    <h1>책 정보 등록</h1>
+  </header>
+
+  <div class="container">
+    <form action="/write/book" method="POST" enctype="multipart/form-data" class="book-form">
+      <div class="form-group">
+        <label for="title">책 제목</label>
+        <input type="text" id="title" name="title" placeholder="책 제목을 입력하세요" required>
+      </div>
+
+      <div class="form-group">
+        <label for="author">저자</label>
+        <input type="text" id="author" name="author" placeholder="저자를 입력하세요" required>
+      </div>
+
+      <div class="form-group">
+        <label for="category">카테고리</label>
+        <select id="category" name="category_id" required>
+          <% categories.forEach(category=> { %>
+            <option value="<%= category.category_id %>"><%= category.name %></option>
+            <% }); %>
+        </select>
+    </div>
+
+      <div class="form-group">
+        <label for="price">가격</label>
+        <input type="number" id="price" name="price" placeholder="가격을 입력하세요" required>
+      </div>
+
+      <div class="form-group">
+        <label for="description">도서 설명</label>
+        <textarea id="description" name="description" placeholder="도서 설명을 입력하세요" required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="image_path">책 이미지</label>
+        <input type="file" id="image_path" name="image_path" accept="image/*" onchange="previewImage(event)">
+        <!-- 미리보기 이미지 -->
+        <div id="image-preview-container" class="center">
+          <img id="image-preview" src="#" alt="미리보기 이미지" >
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn">등록하기</button>
+    </form>
+  </div>
+
+  <script>
+    // 이미지 미리보기 함수
+    function previewImage(event) {
+      var file = event.target.files[0];  // 선택된 파일
+      var reader = new FileReader();     // 파일 리더
+      reader.onload = function () {
+        var preview = document.getElementById('image-preview');
+        preview.src = reader.result;  // 파일 내용을 이미지 미리보기로 설정
+        preview.style.display = 'block'; // 미리보기 이미지 표시
+      };
+      if (file) {
+        reader.readAsDataURL(file); // 파일을 DataURL로 읽기
+      }
+    }
+  </script>

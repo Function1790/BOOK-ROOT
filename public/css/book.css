@@ -1,0 +1,75 @@
+
+.container {
+  width: 95%; /* 더 넓게 */
+  max-width: 1000px; /* 최대 크기 키움 */
+  margin: 40px auto; /* 더 여유 있게 */
+  background: #fff;
+  padding: 30px; /* 더 넓은 패딩 */
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1); /* 그림자 효과 강화 */
+  border-radius: 12px; /* 둥근 모서리 더 강조 */
+}
+
+.book-info {
+  display: flex;
+  align-items: center; /* 이미지와 텍스트 중앙 정렬 */
+  justify-content: space-between; /* 더 여유 있게 요소 배치 */
+}
+
+.book-image {
+  width: 250px; /* 이미지 크기 증가 */
+  height: auto;
+  margin-right: 30px; /* 간격 확대 */
+}
+
+.book-details {
+  flex: 1;
+  padding-right: 30px; /* 텍스트와 오른쪽 사이에 여백 추가 */
+}
+
+h1 {
+  font-size: 28px; /* 제목 크기 키움 */
+  margin-bottom: 15px; /* 여백 조정 */
+  color: #333;
+}
+
+.author {
+  font-size: 16px; /* 저자 글씨 크기 키움 */
+  color: #777;
+  margin-bottom: 15px; /* 여백 조정 */
+}
+
+.price {
+  font-size: 20px; /* 가격 글씨 크기 키움 */
+  margin-bottom: 15px; /* 여백 조정 */
+}
+
+.current-price {
+  font-weight: bold;
+  color: #333;
+}
+
+.points {
+  font-size: 16px;
+  margin-bottom: 20px; /* 여백 추가 */
+}
+
+.purchase-btn,
+.gift-btn {
+  display: inline-block;
+  padding: 12px 18px; /* 버튼 크기 키움 */
+  font-size: 16px; /* 버튼 글씨 크기 키움 */
+  color: #fff;
+  background: #2db400;
+  border: none;
+  border-radius: 6px; /* 버튼 모서리 둥글게 */
+  margin-right: 15px;
+  cursor: pointer;
+}
+
+.gift-btn {
+  background: #0076ff;
+}
+
+button:hover {
+  opacity: 0.9;
+}

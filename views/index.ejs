@@ -1,2 +1,26 @@
 <% layout('layouts/layout') %>
-<h1>this is BOOK ROOT</h1>
+  <link rel="stylesheet" href="/css/index.css">
+  <header>
+    <h1>책 목록</h1>
+  </header>
+  <main class="book-list">
+    <% books.forEach(book=> { %>
+
+      <div class="book-card">
+          <a href="/book/<%= book.book_id %>">
+            <img src="<%= book.image_path ? '/img/'+book.image_path : 'error-book.png' %>" alt="책 이미지"
+              class="book-image">
+            <div class="book-details">
+              <h2 class="book-title">
+                <%= book.title %>
+              </h2>
+              <p class="book-author">저자: <%= book.author %>
+              </p>
+              <p class="book-price">₩ <%= book.price %>
+              </p>
+          </a>
+      </div>
+
+      </div>
+      <% }); %>
+  </main>

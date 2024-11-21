@@ -1,8 +1,21 @@
 <div class="nav">
-  <div class="nav-header"></div>
+  <div class="nav-header">
+    <div class="logo-wrap center">
+      <a href="/">
+        <div class="logo">
+          <img src="/img/logo.png">
+        </div>
+      </a>
+    </div>
+    <div class="title">북 루트</div>
+  </div>
   <div class="nav-content"></div>
   <div class="nav-footer">
-    <div class="link"><%= username %></div>
-    <div class="link"><a href="/<%= loginHref %>"><%= loginHref %></a></div>
+    <div class="link-button">
+      <%= username %>
+    </div>
+    <div class="link-button"><a href="/<%= loginHref %>">
+        <%= loginHref %>
+      </a></div>
   </div>
 </div>

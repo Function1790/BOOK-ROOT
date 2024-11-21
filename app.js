@@ -91,7 +91,10 @@ app.use((req, res, next) => {
 });
 
 app.get('/', async (req, res) => {
-    res.render('index');
+    const sqlResult = await sqlQuery(`select * from books`);
+    res.render('index', {
+        books: sqlResult
+    });
 });
 
 app.get('/login', (req, res) => {
@@ -101,14 +104,14 @@ app.get('/login', (req, res) => {
 app.post('/login', async (req, res) => {
     const body = req.body;
     const [email, password] = [
-        body.email, 
+        body.email,
         body.password
     ];
     const sqlResult = await sqlQuery(
-        `select * from users where email=${email} and password=${password}`
+        `select * from users where email='${email}' and password='${password}'`
     );
 
-    if(isEmpty(sqlResult)) {
+    if (isEmpty(sqlResult)) {
         res.redirect("/login");
         return;
     }
@@ -137,7 +140,7 @@ app.get('/join', (req, res) => {
 app.post('/join', async (req, res) => {
     const body = req.body;
     const [username, email, password] = [body.username, body.email, body.password];
-    if(!username || !email || !password) {
+    if (!username || !email || !password) {
         res.redirect('join');
         return;
     }
@@ -147,5 +150,44 @@ app.post('/join', async (req, res) => {
     res.redirect('/');
     Log("Join", `'${username}'님이 계정을 생성하셨습니다.`)
 });
+
+app.get('/book/:id', async (req, res) => {
+    const bookId = req.params.id;
+    const sqlResult = await sqlQuery(`select * from books where book_id=${bookId}`);
+    if (isEmpty(sqlResult)) {
+        res.redirect('/');
+        return;
+    }
+    const book = sqlResult[0]
+    res.render('book', {
+        book: book
+    });
+});
+
+app.get('/write/book', async (req, res) => {
+    //TODO: 권한
+    const categories = await sqlQuery(`select * from categories`);
+    res.render("write", {
+        categories: categories
+    })
+});
+
+app.post('/write/book', upload.single('image_path'), async (req, res, next) => {
+    //TODO: 권한
+    const { originalname, filename, size } = req.file;
+    const body = req.body;
+    const [title, author, category_id, price, description] =
+        [body.title, body.author, body.category_id, body.price, body.description];
+    const isUndefined = !title || !author || !category_id || !price || !description;
+    if (isUndefined || !originalname) {
+        res.redirect("/write/book");
+        return;
+    }
+    var query = `insert into books (title, author, category_id, price, description, image_path) values `
+    query += `('${title}', '${author}', ${category_id}, ${price}, '${description}', '${originalname}')`
+    await sqlQuery(query)
+    res.redirect("/");
+    Log("Write", `'${title}'이라는 제목의 책을 등록하였습니다.`)
+})
 
 app.listen(5500, () => Log("Start", '서버가 https://127.0.0.1:5500 에서 작동하고 있습니다'));

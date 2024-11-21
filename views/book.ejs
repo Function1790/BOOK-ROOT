@@ -1,1 +1,19 @@
 <% layout('layouts/layout') %>
+<link rel="stylesheet" href="/css/book.css">
+<div class="container">
+  <div class="book-info">
+      <img src="<%= book.image_path ? '/img/'+book.image_path : 'error-book.png' %>" alt="Book Cover" class="book-image">
+      <div class="book-details">
+          <h1><%= book.title %></h1>
+          <p class="author"><%= book.author %> 저</p>
+          <p class="price">
+              <span class="current-price"><%= book.price %>원</span>
+          </p>
+          <p class="points">적립 포인트 
+            <span><%= Math.floor(book.price*.01) %>P</span>
+          </p>
+          <button class="purchase-btn">구매하기</button>
+          <button class="gift-btn">카트에 넣기</button>
+      </div>
+  </div>
+</div>
