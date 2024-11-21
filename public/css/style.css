@@ -1,0 +1,10 @@
+.root {
+  width: 100vw;
+}
+
+.nav {
+  width: 100%;
+  background-color: #28c4af;
+  height: 62px;
+  display: flex;
+}
