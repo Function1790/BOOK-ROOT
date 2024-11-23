@@ -35,6 +35,7 @@ const connection = mysql.createConnection({
 connection.connect();
 
 async function sqlQuery(query) {
+    console.log(query);
     let promise = new Promise((resolve, reject) => {
         const rows = connection.query(query, (error, rows, fields) => {
             resolve(rows);
@@ -83,6 +84,21 @@ function isEmpty(array) {
     return !array || array.length == 0;
 }
 
+function isLoggedIn(req, res) {
+    if (req.session?.loggedIn) {
+        return true;
+    }
+    res.redirect('/login');
+    return false;
+}
+
+function isAdmin(req) {
+    if (req.session.role === 'ADMIN') {
+        return true;
+    }
+    return false;
+}
+
 //<----------Web---------->
 app.use((req, res, next) => {
     res.locals.loggedIn = req.session.loggedIn;
@@ -93,9 +109,12 @@ app.use((req, res, next) => {
 app.get('/', async (req, res) => {
     const sqlResult = await sqlQuery(`select * from books`);
     const top3 = await sqlQuery(`select * from books order by sold_count desc limit 3;`);
+    const categories = await sqlQuery(`select * from categories`);
+
     res.render('index', {
         books: sqlResult,
-        top3: top3
+        top3: top3,
+        categories: categories
     });
 });
 
@@ -119,6 +138,7 @@ app.post('/login', async (req, res) => {
     }
 
     const user = sqlResult[0];
+    req.session.user_id = user.user_id
     req.session.username = user.username;
     req.session.email = email;
     req.session.role = user.role;
@@ -162,7 +182,8 @@ app.get('/book/:id', async (req, res) => {
     }
     const book = sqlResult[0]
     res.render('book', {
-        book: book
+        book: book,
+        isAdmin: isAdmin(req)
     });
 });
 
@@ -227,6 +248,48 @@ app.post('/update/book/:id', upload.single('image_path'), async (req, res, next)
     await sqlQuery(query)
     res.redirect("/");
     Log("Write", `'${title}'이라는 제목의 책을 등록하였습니다.`)
+})
+
+app.get('/delete/book/:id', async (req, res) => {
+    if (!isAdmin(req)) {
+        res.redirect('/login')
+        return
+    }
+    const bookId = req.params.id;
+    await sqlQuery(`delete from books where book_id=${bookId}`);
+    res.redirect('/')
+});
+
+app.get('/profile', async (req, res) => {
+    if (!isLoggedIn(req, res)) { return; }
+    const user = await sqlQuery(`select * from users where user_id=${req.session.user_id}`);
+    res.render('profile', { user: user[0] });
+})
+
+app.get('/search', async (req, res) => {
+    const category = req.query.category;
+    const keyword = req.query.keyword;
+
+    var condition = '';
+    if (category) {
+        condition = `where category_id=${category}`
+    }
+    if (keyword) {
+        condition += category ? ' and ' : 'where '
+        condition += `category_id=${category}`
+    }
+
+    const query = `select * from books ${condition}`;
+    const books = await sqlQuery(query);
+    const categories = await sqlQuery(`select * from categories`);
+
+    res.render('search', {
+        books: books,
+        categories: categories
+    });
+})
+
+app.get('/cart/add',async (req, res) => {
 })
 
 app.listen(5500, () => Log("Start", '서버가 https://127.0.0.1:5500 에서 작동하고 있습니다'));

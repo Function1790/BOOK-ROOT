@@ -54,7 +54,8 @@ h1 {
 }
 
 .purchase-btn,
-.gift-btn {
+.gift-btn,
+.admin-btn {
   display: inline-block;
   padding: 12px 18px; /* 버튼 크기 키움 */
   font-size: 16px; /* 버튼 글씨 크기 키움 */
@@ -72,4 +73,25 @@ h1 {
 
 button:hover {
   opacity: 0.9;
+}
+
+.admin-btn {
+  background: #f39c12 ;
+}
+
+.book-description {
+  margin-top: 20px;
+  padding-top: 20px;
+  border-top: 2px solid #eee;
+}
+
+.book-description h3 {
+  font-size: 20px;
+  margin-bottom: 15px;
+}
+
+.book-description p {
+  font-size: 16px;
+  color: #333;
+  line-height: 1.5;
 }

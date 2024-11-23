@@ -1,19 +1,43 @@
 <% layout('layouts/layout') %>
-<link rel="stylesheet" href="/css/book.css">
-<div class="container">
-  <div class="book-info">
-      <img src="<%= book.image_path ? '/img/'+book.image_path : 'error-book.png' %>" alt="Book Cover" class="book-image">
+  <link rel="stylesheet" href="/css/book.css">
+  <div class="container">
+    <div class="book-info">
+      <img src="<%= book.image_path ? '/img/'+book.image_path : 'error-book.png' %>" alt="Book Cover"
+        class="book-image">
       <div class="book-details">
-          <h1><%= book.title %></h1>
-          <p class="author"><%= book.author %> 저</p>
-          <p class="price">
-              <span class="current-price"><%= book.price %>원</span>
-          </p>
-          <p class="points">적립 포인트 
-            <span><%= Math.floor(book.price*.01) %>P</span>
-          </p>
-          <button class="purchase-btn">구매하기</button>
-          <button class="gift-btn">카트에 넣기</button>
+        <h1>
+          <%= book.title %>
+        </h1>
+        <p class="author">
+          <%= book.author %> 저
+        </p>
+        <p class="price">
+          <span class="current-price">
+            <%= book.price %>원
+          </span>
+        </p>
+        <p class="points">적립 포인트
+          <span>
+            <%= Math.floor(book.price*.01) %>P
+          </span>
+        </p>
+        <button class="purchase-btn">구매하기</button>
+        <button class="gift-btn">카트에 넣기</button>
+        <% if (isAdmin) { %>
+          <a href="/update/book/<%= book.book_id %>">
+            <button class="admin-btn">업데이트</button>
+          </a>
+          <a href="/delete/book/<%= book.book_id %>">
+            <button class="admin-btn">삭제</button>
+          </a>
+          <% } %>
+            <!-- 책 설명 -->
+            <div class="book-description">
+              <h3>책 설명</h3>
+              <p>
+                <%= book.description || "설명이 없습니다." %>
+              </p>
+            </div>
       </div>
+    </div>
   </div>
-</div>

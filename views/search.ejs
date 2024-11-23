@@ -1,0 +1,43 @@
+<% layout('layouts/layout') %>
+    <link rel="stylesheet" href="/css/search.css">
+    <div class="category-container">
+        <h1>카테고리별 책 탐색</h1>
+        <div class="search-bar" style="display: none;">
+            <input name="keyword" type="text" id="search-input" placeholder="책 제목 또는 저자를 검색하세요..." aria-label="책 검색" />
+            <input type="submit" id="search-button" value="검색"></input>
+            </form>
+        </div>
+        <div class="category-menu">
+            <a href="/search">
+                <button class="category-btn" data-category="0">전체</button>
+            </a>
+            <% categories.forEach(category=> { %>
+                <a href="/search?category=<%= category.category_id %>">
+                    <button class="category-btn" data-category="<%= category.category_id %>">
+                        <%= category.name %>
+                    </button>
+                </a>
+                <% }); %>
+        </div>
+        <div class="books-container" id="books-container">
+            <% books.forEach(book=> { %>
+                <a href="/book/<%= book.book_id %>">
+                    <div class="book-card">
+                        <img src="/img/<%= book.image_path %>" class="book-image">
+                        <div class="book-info">
+                            <h3>
+                                <%= book.title %>
+                            </h3>
+                            <p>
+                                <%= book.author %>
+                                    <strong> 저</strong>
+                            </p>
+                            <p class="price">
+                                <%= book.price %>원
+                            </p>
+                        </div>
+                    </div>
+                </a>
+                <% }); %>
+        </div>
+    </div>

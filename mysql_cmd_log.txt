@@ -3,18 +3,18 @@ CREATE TABLE users(
     username VARCHAR(50) NOT NULL UNIQUE,
     email VARCHAR(100) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-    points INT DEFAULT 0, -- 누적 포인트
+    money INT DEFAULT 0,
+    point INT DEFAULT 0, -- 누적 포인트
     role ENUM('USER', 'ADMIN') DEFAULT 'USER' -- 사용자 역할
 );
 
-insert into users(username, email, password) values ("임시 사용자","guest","guest");
+insert into users(username, email, password) values ("게스트","guest","guest");
 insert into users(username, email, password, role) values ("관리자","admin","0000", "ADMIN");
 
 CREATE TABLE categories (
     category_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE
 );
-insert into categories (name) values("시");
 insert into categories (name) values("자기계발");
 insert into categories (name) values("과학");
 insert into categories (name) values("컴퓨터");
@@ -33,3 +33,35 @@ CREATE TABLE books (
     FOREIGN KEY (category_id) REFERENCES categories(category_id)
 );
 insert into books (title, author, category_id, price, description, image_path) values ("물리의 정석", "레너드서스킨드", 3, 16650, "물리를 배우고 싶은 누구든 환영입니다.", "sameple1.jpg");
+
+//
+4. cart 테이블 (장바구니 관리)
+사용자가 카트에 담은 상품을 관리합니다.
+CREATE TABLE cart (
+    cart_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    book_id INT,
+    quantity INT DEFAULT 1, -- 수량
+    added_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id),
+    FOREIGN KEY (book_id) REFERENCES books(book_id)
+);
+5. orders 테이블 (구매 이력 관리)
+CREATE TABLE orders (
+    order_id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    total_price DECIMAL(10, 2) NOT NULL, -- 총 결제 금액
+    earned_points INT DEFAULT 0, -- 적립된 포인트
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(user_id)
+);
+6. order_items 테이블 (구매 항목 관리)
+CREATE TABLE order_items (
+    order_item_id INT AUTO_INCREMENT PRIMARY KEY,
+    order_id INT,
+    book_id INT,
+    quantity INT NOT NULL, -- 구매 수량
+    price DECIMAL(10, 2) NOT NULL, -- 구매 당시의 가격
+    FOREIGN KEY (order_id) REFERENCES orders(order_id),
+    FOREIGN KEY (book_id) REFERENCES books(book_id)
+);

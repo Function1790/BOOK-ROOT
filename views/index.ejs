@@ -1,42 +1,39 @@
 <% layout('layouts/layout') %>
   <link rel="stylesheet" href="/css/index.css" />
-  <header class="header">
-    <div class="header-content">
-      <h1>TOP 3</h1>
-    </div>
-  </header>
-  <div class="book-container">
-    <section class="book-section">
-      <% top3.forEach(book=> { %>
-        <div class="book-card">
-          <a href="/book/<%= book.book_id %>">
-            <img src="<%= '/img/'+book.image_path %>" alt="책 이미지" class="book-image">
-            <div class="book-info">
-              <h3 class="book-title">
-                <%= book.title %>
-              </h3>
-              <p class="book-author">
-                <%= book.author %>
-              </p>
-              <p class="book-price">
-                <span class="current-price">
-                  <%= book.price %>원
-                </span>
-              </p>
-            </div>
-          </a>
-        </div>
-        <% }); %>
-    </section>
+  <div class="main-container">
+    <!-- TOP 3 책 섹션 -->
+    <section class="top3-section">
+      <h1>📚 TOP 3 책</h1>
+      <div class="top3-books" id="top3-books">
+        <% top3.forEach(book=> { %>
+          <div class="book-card">
+            <a href="/book/<%= book.book_id %>">
+              <img src="<%= '/img/'+book.image_path %>" alt="책 이미지" class="book-image">
+              <div class="book-info">
+                <h3 class="book-title">
+                  <%= book.title %>
+                </h3>
+                <p class="book-author">
+                  <%= book.author %> 저
+                </p>
+                <p class="book-price">
+                  <span class="current-price">
+                    <%= book.price %>원
+                  </span>
+                </p>
+              </div>
+            </a>
+          </div>
+          <% }); %>
+      </div>
   </div>
 
-  <header class="header">
-    <div class="header-content">
-      <h1>ALL</h1>
-    </div>
-  </header>
-  <div class="book-container">
-    <section class="book-section">
+  </section>
+
+  <!-- 모든 책 섹션 -->
+  <section class="all-books-section">
+    <h1>📖 모든 책</h1>
+    <div class="all-books" id="all-books">
       <% books.forEach(book=> { %>
 
         <div class="book-card">
@@ -47,7 +44,7 @@
                 <%= book.title %>
               </h3>
               <p class="book-author">
-                <%= book.author %>
+                <%= book.author %> 저
               </p>
               <p class="book-price">
                 <span class="current-price">
@@ -59,9 +56,23 @@
         </div>
 
         <% }); %>
-    </section>
-  </div>
+    </div>
+  </section>
 
-  <footer class="footer">
-    <p>© 2024 Book Root</p>
-  </footer>
+  <!-- 카테고리 섹션 -->
+  <section class="category-section">
+    <h1>🔍 카테고리 탐색</h1>
+    <div class="category-menu">
+      <a href="/search">
+        <button class="category-btn" data-category="0">전체</button>
+    </a>
+      <% categories.forEach(category=> { %>
+        <a href="/search?category=<%= category.category_id %>">
+            <button class="category-btn" data-category="<%= category.category_id %>">
+                <%= category.name %>
+            </button>
+        </a>
+        <% }); %>
+    </div>
+  </section>
+  </div>
