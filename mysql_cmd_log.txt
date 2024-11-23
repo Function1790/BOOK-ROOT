@@ -1,3 +1,4 @@
+# 유저
 CREATE TABLE users(
     user_id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
@@ -11,6 +12,7 @@ CREATE TABLE users(
 insert into users(username, email, password) values ("게스트","guest","guest");
 insert into users(username, email, password, role) values ("관리자","admin","0000", "ADMIN");
 
+# 카테고리
 CREATE TABLE categories (
     category_id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(50) NOT NULL UNIQUE
@@ -20,6 +22,7 @@ insert into categories (name) values("과학");
 insert into categories (name) values("컴퓨터");
 insert into categories (name) values("소설");
 
+# 책
 CREATE TABLE books (
     book_id INT AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(100) NOT NULL,
@@ -34,9 +37,7 @@ CREATE TABLE books (
 );
 insert into books (title, author, category_id, price, description, image_path) values ("물리의 정석", "레너드서스킨드", 3, 16650, "물리를 배우고 싶은 누구든 환영입니다.", "sameple1.jpg");
 
-//
-4. cart 테이블 (장바구니 관리)
-사용자가 카트에 담은 상품을 관리합니다.
+# 카트
 CREATE TABLE cart (
     cart_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
@@ -46,7 +47,10 @@ CREATE TABLE cart (
     FOREIGN KEY (user_id) REFERENCES users(user_id),
     FOREIGN KEY (book_id) REFERENCES books(book_id)
 );
-5. orders 테이블 (구매 이력 관리)
+# insert into cart (user_id, book_id) values (1, 1);
+
+# TODO
+#5. orders 테이블 (구매 이력 관리)
 CREATE TABLE orders (
     order_id INT AUTO_INCREMENT PRIMARY KEY,
     user_id INT,
@@ -55,7 +59,7 @@ CREATE TABLE orders (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(user_id)
 );
-6. order_items 테이블 (구매 항목 관리)
+#6. order_items 테이블 (구매 항목 관리)
 CREATE TABLE order_items (
     order_item_id INT AUTO_INCREMENT PRIMARY KEY,
     order_id INT,

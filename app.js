@@ -35,7 +35,6 @@ const connection = mysql.createConnection({
 connection.connect();
 
 async function sqlQuery(query) {
-    console.log(query);
     let promise = new Promise((resolve, reject) => {
         const rows = connection.query(query, (error, rows, fields) => {
             resolve(rows);
@@ -99,9 +98,22 @@ function isAdmin(req) {
     return false;
 }
 
+function formatMoney(point) {
+    return point.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+function ajaxResponse(status, message, next = '') {
+    return {
+        status: status,
+        message: message,
+        next: next
+    }
+}
+
 //<----------Web---------->
 app.use((req, res, next) => {
     res.locals.loggedIn = req.session.loggedIn;
+    res.locals.formatMoney = formatMoney;
     res.locals.username = req.session?.username || '';
     next();
 });
@@ -211,7 +223,7 @@ app.post('/write/book', upload.single('image_path'), async (req, res, next) => {
     await sqlQuery(query)
     res.redirect("/");
     Log("Write", `'${title}'이라는 제목의 책을 등록하였습니다.`)
-})
+});
 
 app.get('/update/book/:id', async (req, res) => {
     //TODO: 권한
@@ -248,7 +260,7 @@ app.post('/update/book/:id', upload.single('image_path'), async (req, res, next)
     await sqlQuery(query)
     res.redirect("/");
     Log("Write", `'${title}'이라는 제목의 책을 등록하였습니다.`)
-})
+});
 
 app.get('/delete/book/:id', async (req, res) => {
     if (!isAdmin(req)) {
@@ -264,7 +276,7 @@ app.get('/profile', async (req, res) => {
     if (!isLoggedIn(req, res)) { return; }
     const user = await sqlQuery(`select * from users where user_id=${req.session.user_id}`);
     res.render('profile', { user: user[0] });
-})
+});
 
 app.get('/search', async (req, res) => {
     const category = req.query.category;
@@ -287,9 +299,68 @@ app.get('/search', async (req, res) => {
         books: books,
         categories: categories
     });
+});
+
+app.get('/cart/add', async (req, res) => {
+    if (!isLoggedIn(req, res)) { return; }
+    const user_id = req.session.user_id;
+    const book_id = req.query.book_id;
+    await sqlQuery(`insert into cart (user_id, book_id) values (${user_id}, ${book_id});`);
+    res.redirect('/');
+});
+
+app.get('/cart', async (req, res) => {
+    if (!isLoggedIn(req, res)) { return; }
+    const user_id = req.session.user_id;
+    const cart = await sqlQuery(`select * from cart where user_id=${user_id}`);
+    const user = await sqlQuery(`select * from users where user_id=${user_id}`);
+    for (var i in cart) {
+        const book = await sqlQuery(`select * from books where book_id=${cart[i].book_id}`);
+        cart[i].book = book[0];
+    }
+    res.render('cart', {
+        cart: cart,
+        user: user[0]
+    })
+});
+app.post('/purchase', async (req, res) => {
+    const { selectedItems, useMoney, usePoint } = req.body;
+    //오류 처리
+    console.log(selectedItems)
+    if (!isLoggedIn(req, res)) { return; }
+    if (selectedItems.length <= 0) {
+        res.json(ajaxResponse("error", "아이템을 선택해주세요"));
+        return;
+    }
+    //정산 및 데이터 수집
+    const items = []
+    let total = 0;
+    for (var i in selectedItems) {
+        const book = await sqlQuery(`select * from books where book_id=${selectedItems[i].book_id}`);
+        items.push(book[0]);
+        total += book[0].price;
+    }
+    let user = await sqlQuery(`select * from users where user_id=${req.session.user_id}`);
+    user = user[0];
+    //가격 확인
+    if (user.point < usePoint || user.money < useMoney) {
+        res.json(ajaxResponse("error", "돈/포인트는 가진 것 보다 많이 사용할 수 없습니다"));
+        return;
+    } else if (usePoint + useMoney !== total) {
+        res.json(ajaxResponse("error", "가격을 확인해주세요"));
+        return;
+    }
+    const afterMoney = user.money - useMoney;
+    const afterPoint = user.point - usePoint;
+    sqlQuery(`update users set point=${afterPoint}, money=${afterMoney} where user_id=${req.session.user_id}`);
+    Log("Query", `update users set point=${afterPoint}, money=${afterMoney} where user_id=${req.session.user_id}`)
+    for (var i in selectedItems) {
+        sqlQuery(`delete from cart where cart_id=${selectedItems[i].cart_id}`)
+        Log("Query", `delete from cart where cart_id=${selectedItems[i].cart_id}`)
+    }
+    res.json(ajaxResponse("success", "", "/"));
 })
 
-app.get('/cart/add',async (req, res) => {
-})
-
-app.listen(5500, () => Log("Start", '서버가 https://127.0.0.1:5500 에서 작동하고 있습니다'));
+app.listen(5500, () => {
+    Log("Start", '서버가 https://127.0.0.1:5500 에서 작동하고 있습니다');
+});

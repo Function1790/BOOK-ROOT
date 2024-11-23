@@ -1,1 +1,71 @@
 <% layout('layouts/layout') %>
+  <link rel="stylesheet" href="/css/cart.css">
+
+  <div class="container">
+    <h1>장바구니</h1>
+
+    <% if (cart.length===0) { %>
+      <p>현재 장바구니에 담긴 책이 없습니다.</p>
+      <% } else { %>
+        <div class="cart-items">
+          <% cart.forEach((item)=> { %>
+            <div class="cart-item">
+              <input type="number" class="cart-price" value="<%= item.book.price %>" hidden>
+              <input type="number" class="book-id" value="<%= item.book.book_id %>" hidden>
+              <input type="number" class="cart-id" value="<%= item.cart_id %>" hidden>
+              <input type="checkbox" class="select-checkbox" data-id="<%= item.book.book_id %>"
+                data-title="<%= item.book.title %>" id="book-<%= item.book_id %>">
+              <label for="book-<%= item.book_id %>">
+                <div class="item-wrap">
+                  <img src="<%= item.book.image_path ? '/img/'+item.book.image_path : 'error-book.png' %>"
+                    alt="Book Cover" class="cart-item-image">
+                  <div class="cart-item-details">
+                    <h2>
+                      <%= item.book.title %>
+                    </h2>
+                    <p>
+                      <%= item.book.author %> 저
+                    </p>
+                    <p class="price">
+                      <%= formatMoney(item.book.price) %>원
+                    </p>
+                    <button class="select-btn" data-id="<%= item.book_id %>"
+                      data-title="<%= item.book.title %>">선택</button>
+                    <button class="remove-btn" data-id="<%= item.book_id %>">삭제</button>
+                  </div>
+                </div>
+            </div>
+            <% }) %>
+        </div>
+
+        <div class="cart-summary">
+          <input id="money" value="<%= user.money %>" hidden/>
+          <input id="point" value="<%= user.point %>" hidden/>
+          <h3>총합</h3>
+          <p>
+            <strong id="cost-summary">총 금액: 0원</strong>
+          </p>
+          <div class="payment-options">
+            <div class="payway-wrap">
+              <div class="payment-label" for="use-money">사용할 금액:</div>
+              <input type="number" id="use-money" min="0" value="0" />
+              <span>/<%= user.money %>원</span>
+            </div>
+            <div class="payway-wrap">
+              <div class="payment-label" for="use-point">사용할 포인트:</div>
+              <input type="number" id="use-point" min="0" value="0" />
+              <span>/<%= user.point %>P</span>
+            </div>
+
+          </div>
+
+          <p>
+            <strong id="final-cost">최종 결제 금액: 0원</strong>
+          </p>
+
+          <button class="checkout-btn">결제하기</button>
+        </div>
+        <% } %>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="/src/cart.js"></script>

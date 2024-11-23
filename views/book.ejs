@@ -13,7 +13,7 @@
         </p>
         <p class="price">
           <span class="current-price">
-            <%= book.price %>원
+            <%= formatMoney(book.price) %>원
           </span>
         </p>
         <p class="points">적립 포인트
@@ -22,7 +22,9 @@
           </span>
         </p>
         <button class="purchase-btn">구매하기</button>
-        <button class="gift-btn">카트에 넣기</button>
+        <a href="/cart/add?book_id=<%= book.book_id %>">
+          <button class="gift-btn">카트에 넣기</button>
+        </a>
         <% if (isAdmin) { %>
           <a href="/update/book/<%= book.book_id %>">
             <button class="admin-btn">업데이트</button>

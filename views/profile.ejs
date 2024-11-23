@@ -11,8 +11,8 @@
         <div class="profile-info">
           <h2>프로필 정보</h2>
           <p><strong>이메일:</strong> <%= user.email %> </p>
-          <p><strong>보유 금액:</strong> <%= user.money %>원</p>
-          <p><strong>누적 포인트:</strong> <%= user.point %>P</p>
+          <p><strong>보유 금액:</strong> <%= formatMoney(user.money) %>원</p>
+          <p><strong>누적 포인트:</strong> <%= formatMoney(user.point) %>P</p>
         </div>
         <div class="profile-actions">
           <!--button class="edit-btn"></-button-->

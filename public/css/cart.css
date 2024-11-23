@@ -1,0 +1,237 @@
+/* 기본 스타일 */
+.container {
+  width: 80%;
+  margin: 20px auto;
+}
+
+h1 {
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+.cart-items {
+  display: flex;
+  flex-direction: column;
+}
+
+.cart-item {
+  display: flex;
+  margin-bottom: 20px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+}
+
+.cart-item-image {
+  width: 100px;
+  height: 150px;
+  object-fit: cover;
+  margin-right: 20px;
+}
+
+.cart-item-details {
+  flex-grow: 1;
+}
+
+.cart-item-details h2 {
+  font-size: 20px;
+  margin-bottom: 10px;
+}
+
+.cart-item-details p {
+  font-size: 16px;
+  color: #777;
+  margin-bottom: 10px;
+}
+
+.cart-item-details .price {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.quantity {
+  margin-bottom: 10px;
+}
+
+.quantity input {
+  width: 50px;
+  padding: 5px;
+  font-size: 14px;
+  margin-left: 10px;
+}
+
+.remove-btn {
+  background-color: #ff5733;
+  color: white;
+  padding: 8px 15px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.select-btn {
+  background-color: #0076ff; /* 파란색 */
+  color: white;
+  padding: 8px 15px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.select-btn:hover {
+  background-color: #005bb5;
+}
+
+.remove-btn:hover {
+  background-color: #e04e28;
+}
+
+.cart-summary {
+  margin-top: 30px;
+  padding: 20px;
+  border-top: 2px solid #eee;
+}
+
+.cart-summary h3 {
+  font-size: 22px;
+  margin-bottom: 10px;
+}
+
+.cart-summary p {
+  font-size: 18px;
+  margin-bottom: 20px;
+}
+
+.checkout-btn {
+  background-color: #0076ff;
+  color: white;
+  padding: 12px 25px;
+  font-size: 18px;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.checkout-btn:hover {
+  background-color: #005bb5;
+}
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.cart-item-image {
+  width: 100px;
+  height: 150px;
+  object-fit: cover;
+  margin-right: 20px;
+}
+
+.cart-item-details {
+  flex: 1;
+}
+
+.select-checkbox {
+  margin-right: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.cart-summary {
+  margin-top: 20px;
+  padding: 20px;
+  background-color: #f4f4f4;
+  border-radius: 8px;
+}
+
+.checkout-btn {
+  background-color: #2db400; /* 초록색 */
+  color: white;
+  padding: 15px 30px;
+  border: none;
+  cursor: pointer;
+}
+
+.checkout-btn:hover {
+  background-color: #228e00;
+}
+
+.item-wrap {
+  display: flex;
+  flex-direction: row;
+}
+
+.cart-summary {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f8f8f8;
+  border-radius: 5px;
+}
+
+.cart-summary h3 {
+  font-size: 1.5em;
+  margin-bottom: 15px;
+}
+
+.payment-options {
+  margin-bottom: 15px;
+}
+
+.payment-options label {
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.payment-options input {
+  width: 80px;
+  padding: 5px;
+  margin-right: 10px;
+  text-align: right;
+}
+
+#final-cost {
+  font-size: 1.2em;
+  color: #0076ff;
+}
+
+.checkout-btn {
+  background-color: #0076ff;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.checkout-btn:hover {
+  background-color: #005bb5;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox  */
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+.payway-wrap {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: row;
+}
+
+.payment-label {
+  width: 110px;
+  font-weight: bold;
+}
