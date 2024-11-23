@@ -21,7 +21,9 @@
             <%= Math.floor(book.price*.01) %>P
           </span>
         </p>
-        <button class="purchase-btn">구매하기</button>
+        <a href="/cart/add?book_id=<%= book.book_id %>">
+          <button class="purchase-btn">구매하기</button>
+        </a>
         <a href="/cart/add?book_id=<%= book.book_id %>">
           <button class="gift-btn">카트에 넣기</button>
         </a>

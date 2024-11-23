@@ -113,6 +113,7 @@ function ajaxResponse(status, message, next = '') {
 //<----------Web---------->
 app.use((req, res, next) => {
     res.locals.loggedIn = req.session.loggedIn;
+    res.locals.isAdmin = isAdmin(req);
     res.locals.formatMoney = formatMoney;
     res.locals.username = req.session?.username || '';
     next();
@@ -305,8 +306,8 @@ app.get('/cart/add', async (req, res) => {
     if (!isLoggedIn(req, res)) { return; }
     const user_id = req.session.user_id;
     const book_id = req.query.book_id;
+    const select = req.query.select;
     await sqlQuery(`insert into cart (user_id, book_id) values (${user_id}, ${book_id});`);
-    res.redirect('/');
 });
 
 app.get('/cart', async (req, res) => {
@@ -326,7 +327,6 @@ app.get('/cart', async (req, res) => {
 app.post('/purchase', async (req, res) => {
     const { selectedItems, useMoney, usePoint } = req.body;
     //오류 처리
-    console.log(selectedItems)
     if (!isLoggedIn(req, res)) { return; }
     if (selectedItems.length <= 0) {
         res.json(ajaxResponse("error", "아이템을 선택해주세요"));
@@ -359,6 +359,41 @@ app.post('/purchase', async (req, res) => {
         Log("Query", `delete from cart where cart_id=${selectedItems[i].cart_id}`)
     }
     res.json(ajaxResponse("success", "", "/"));
+})
+
+app.get('/admin', (req, res) => {
+    if(!isAdmin(req)) { 
+        req.redirect("/");
+        return; 
+    }
+    res.render('admin')
+})
+
+app.get('/admin/orders', (req, res) => {
+    if(!isAdmin(req)) { 
+        req.redirect("/");
+        return; 
+    }
+    res.render('admin-orders')
+})
+
+app.get('/admin/products', async (req, res) => {
+    if(!isAdmin(req)) { 
+        req.redirect("/");
+        return; 
+    }
+    const books = await sqlQuery(`select * from books`);
+    res.render('admin-products', { books: books })
+
+})
+
+app.get('/admin/users', async (req, res) => {
+    if(!isAdmin(req)) { 
+        req.redirect("/");
+        return; 
+    }
+    const users = await sqlQuery(`select * from users`);
+    res.render('admin-users', { users: users })
 })
 
 app.listen(5500, () => {

@@ -1,0 +1,54 @@
+.books-container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 50px auto;
+  text-align: center;
+}
+
+.books-container h1 {
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+.actions {
+  margin-bottom: 20px;
+}
+
+.add-book-btn {
+  text-decoration: none;
+  color: white;
+  background-color: #2db400;
+  padding: 10px 20px;
+  border-radius: 8px;
+  transition: background 0.3s ease;
+}
+
+.add-book-btn:hover {
+  background-color: #0076ff;
+}
+
+.books-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.books-table th,
+.books-table td {
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+}
+
+.books-table th {
+  background-color: #f5f5f5;
+}
+
+.edit-btn,
+.delete-btn {
+  text-decoration: none;
+  color: #0076ff;
+  margin: 0 5px;
+}
+
+.delete-btn {
+  color: #ff4d4f;
+}

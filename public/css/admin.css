@@ -1,0 +1,38 @@
+.admin-container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 50px auto;
+  text-align: center;
+}
+
+.admin-container h1 {
+  font-size: 36px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.admin-menu {
+  list-style: none;
+  padding: 0;
+}
+
+.admin-menu > li {
+  box-sizing: border-box;
+  margin: 40px 0;
+}
+
+.admin-menu a {
+  text-decoration: none;
+  font-size: 20px;
+  color: #0076ff;
+  background-color: #f5f5f5;
+  padding: 15px 30px;
+  border-radius: 8px;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.admin-menu a:hover {
+  background-color: #2db400;
+  color: white;
+  transform: scale(1.05);
+}

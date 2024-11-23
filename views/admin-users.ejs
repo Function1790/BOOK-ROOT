@@ -1,0 +1,31 @@
+<% layout('layouts/layout') %>
+<link rel="stylesheet" href="/css/admin-users.css">
+
+<div class="users-container">
+  <h1>회원 관리</h1>
+  <table class="users-table">
+    <thead>
+      <tr>
+        <th>회원 ID</th>
+        <th>이름</th>
+        <th>이메일</th>
+        <th>역할</th>
+        <th>관리</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% users.forEach(user => { %>
+        <tr>
+          <td><%= user.user_id %></td>
+          <td><%= user.username %></td>
+          <td><%= user.email %></td>
+          <td><%= user.role %></td>
+          <td>
+            <a href="/admin/users/update/<%= user.id %>" class="edit-btn">수정</a>
+            <a href="/admin/users/delete/<%= user.id %>" class="delete-btn">삭제</a>
+          </td>
+        </tr>
+      <% }) %>
+    </tbody>
+  </table>
+</div>
