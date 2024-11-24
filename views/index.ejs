@@ -5,10 +5,14 @@
     <section class="top3-section">
       <h1>📚 TOP 3 책</h1>
       <div class="top3-books" id="top3-books">
-        <% top3.forEach(book=> { %>
+        <% top3.forEach((book, index) => { %>
           <div class="book-card">
+            <!-- 등수 표시 -->
+            <div class="rank-badge">
+              <span><%= index + 1 %>위</span>
+            </div>
             <a href="/book/<%= book.book_id %>">
-              <img src="<%= '/img/'+book.image_path %>" alt="책 이미지" class="book-image">
+              <img src="<%= '/img/' + book.image_path %>" alt="책 이미지" class="book-image">
               <div class="book-info">
                 <h3 class="book-title">
                   <%= book.title %>
@@ -24,7 +28,7 @@
               </div>
             </a>
           </div>
-          <% }); %>
+        <% }); %>
       </div>
   </div>
 

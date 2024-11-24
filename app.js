@@ -110,6 +110,14 @@ function ajaxResponse(status, message, next = '') {
     }
 }
 
+function loginAdmin(req) {
+    req.session.user_id = 2;
+    req.session.username = "관리자";
+    req.session.email = "admin";
+    req.session.role = "ADMIN";
+    req.session.loggedIn = true;
+}
+
 //<----------Web---------->
 app.use((req, res, next) => {
     res.locals.loggedIn = req.session.loggedIn;
@@ -306,8 +314,15 @@ app.get('/cart/add', async (req, res) => {
     if (!isLoggedIn(req, res)) { return; }
     const user_id = req.session.user_id;
     const book_id = req.query.book_id;
-    const select = req.query.select;
     await sqlQuery(`insert into cart (user_id, book_id) values (${user_id}, ${book_id});`);
+    res.redirect('/cart');
+});
+
+app.get('/cart/delete/:num', async (req, res) => {
+    if (!isLoggedIn(req, res)) { return; }
+    const cart_id = req.params.num;
+    await sqlQuery(`delete from cart where cart_id=${cart_id}`);
+    res.redirect('/cart');
 });
 
 app.get('/cart', async (req, res) => {
@@ -324,6 +339,7 @@ app.get('/cart', async (req, res) => {
         user: user[0]
     })
 });
+
 app.post('/purchase', async (req, res) => {
     const { selectedItems, useMoney, usePoint } = req.body;
     //오류 처리
@@ -338,6 +354,8 @@ app.post('/purchase', async (req, res) => {
     for (var i in selectedItems) {
         const book = await sqlQuery(`select * from books where book_id=${selectedItems[i].book_id}`);
         items.push(book[0]);
+        selectedItems[i].price = book[0].price;
+        selectedItems[i].title = book[0].title;
         total += book[0].price;
     }
     let user = await sqlQuery(`select * from users where user_id=${req.session.user_id}`);
@@ -350,51 +368,108 @@ app.post('/purchase', async (req, res) => {
         res.json(ajaxResponse("error", "가격을 확인해주세요"));
         return;
     }
+    const addingPoint = Math.floor(0.01 * total)
     const afterMoney = user.money - useMoney;
-    const afterPoint = user.point - usePoint;
-    sqlQuery(`update users set point=${afterPoint}, money=${afterMoney} where user_id=${req.session.user_id}`);
-    Log("Query", `update users set point=${afterPoint}, money=${afterMoney} where user_id=${req.session.user_id}`)
+    const afterPoint = user.point - usePoint + addingPoint;
+    await sqlQuery(`update users set point=${afterPoint}, money=${afterMoney} where user_id=${req.session.user_id}`);
+    var query = `insert into orders (user_id, item_data, total_price, earned_points) values`
+    query += ` (${req.session.user_id}, '${JSON.stringify(selectedItems)}', ${total}, ${addingPoint})`
+    await sqlQuery(query);
     for (var i in selectedItems) {
-        sqlQuery(`delete from cart where cart_id=${selectedItems[i].cart_id}`)
-        Log("Query", `delete from cart where cart_id=${selectedItems[i].cart_id}`)
+        await sqlQuery(`delete from cart where cart_id=${selectedItems[i].cart_id}`)
+        await sqlQuery(`update books set sold_count= sold_count+1 where book_id=${selectedItems[i].book_id} `)
     }
     res.json(ajaxResponse("success", "", "/"));
-})
+});
 
 app.get('/admin', (req, res) => {
-    if(!isAdmin(req)) { 
-        req.redirect("/");
-        return; 
+    if (!isAdmin(req)) {
+        res.redirect("/");
+        return;
     }
     res.render('admin')
-})
+});
 
-app.get('/admin/orders', (req, res) => {
-    if(!isAdmin(req)) { 
-        req.redirect("/");
-        return; 
+app.get('/admin/orders', async (req, res) => {
+    if (!isAdmin(req)) {
+        res.redirect("/");
+        return;
     }
-    res.render('admin-orders')
-})
+    const orders = await sqlQuery(`select * from orders`);
+    for (var i in orders) {
+        const user = await sqlQuery(`select * from users where user_id=${orders[i].user_id}`);
+        const item_data = JSON.parse(orders[i].item_data);
+        orders[i].buyer_name = user[0].username;
+        orders[i].info = item_data[0].title;
+        orders[i].info += item_data.length > 1 ? ` 외 ${item_data.length - 1}개` : '';
+    }
+    res.render('admin-orders', { orders: orders });
+});
 
 app.get('/admin/products', async (req, res) => {
-    if(!isAdmin(req)) { 
-        req.redirect("/");
-        return; 
+    if (!isAdmin(req)) {
+        res.redirect("/");
+        return;
     }
     const books = await sqlQuery(`select * from books`);
-    res.render('admin-products', { books: books })
-
-})
+    res.render('admin-products', { books: books });
+});
 
 app.get('/admin/users', async (req, res) => {
-    if(!isAdmin(req)) { 
-        req.redirect("/");
-        return; 
+    if (!isAdmin(req)) {
+        res.redirect("/");
+        return;
     }
     const users = await sqlQuery(`select * from users`);
     res.render('admin-users', { users: users })
-})
+});
+
+app.get('/admin/user/update/:num', async (req, res) => {
+    if (!isAdmin(req)) {
+        res.redirect("/");
+        return;
+    }
+    const user = await sqlQuery(`select * from users where user_id=${req.params.num}`);
+    res.render('admin-user-update.ejs', { user: user[0] })
+});
+
+app.post('/admin/user/update/:num', async (req, res) => {
+    if (!isAdmin(req)) {
+        res.redirect("/");
+        return;
+    }
+    const { username, email, role } = req.body;
+    var query = `update users set username='${username}',email='${email}',role='${role}' `;
+    query += `where user_id=${req.params.num}`;
+    console.log(query);
+    await sqlQuery(query);
+    res.redirect('/admin/users');
+});
+
+app.get('/order', async (req, res) => {
+    if (!isLoggedIn(req, res)) { return; }
+    const orders = await sqlQuery(`select * from orders where user_id=${req.session.user_id}`);
+    for (var i in orders) {
+        const item_data = JSON.parse(orders[i].item_data);
+        orders[i].info = item_data[0].title;
+        orders[i].info += item_data.length > 1 ? ` 외 ${item_data.length - 1}개` : '';
+    }
+    res.render('order', {
+        orders: orders
+    });
+});
+
+app.get('/order/:num', async (req, res) => {
+    if (!isLoggedIn(req, res)) { return; }
+    var order = await sqlQuery(`select * from orders where order_id=${req.params.num}`);
+    order = order[0]
+    order.item_data = JSON.parse(order.item_data);
+    res.render('order-detail', {
+        order: order,
+        wasAdminPage: req.query.admin
+    })
+});
+
 
 app.listen(5500, () => {
     Log("Start", '서버가 https://127.0.0.1:5500 에서 작동하고 있습니다');

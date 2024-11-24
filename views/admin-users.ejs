@@ -21,8 +21,7 @@
           <td><%= user.email %></td>
           <td><%= user.role %></td>
           <td>
-            <a href="/admin/users/update/<%= user.id %>" class="edit-btn">수정</a>
-            <a href="/admin/users/delete/<%= user.id %>" class="delete-btn">삭제</a>
+            <a href="/admin/user/update/<%= user.user_id %>" class="edit-btn">수정</a>
           </td>
         </tr>
       <% }) %>

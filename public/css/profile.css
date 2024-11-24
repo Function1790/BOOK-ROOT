@@ -101,7 +101,7 @@
   gap: 20px;
 }
 
-.edit-btn, .logout-btn {
+.edit-btn, .logout-btn, .checkout-btn {
   padding: 15px 30px;
   font-size: 16px;
   font-weight: bold;
@@ -126,4 +126,12 @@
 
 .logout-btn:hover {
   background-color: #D32F2F;
+}
+
+.checkout-btn {
+  background-color: #0076ff;
+}
+
+.checkout-btn:hover {
+  background-color: #005bb5;
 }

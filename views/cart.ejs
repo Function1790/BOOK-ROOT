@@ -29,9 +29,9 @@
                     <p class="price">
                       <%= formatMoney(item.book.price) %>원
                     </p>
-                    <button class="select-btn" data-id="<%= item.book_id %>"
-                      data-title="<%= item.book.title %>">선택</button>
+                    <a href="/cart/delete/<%= item.cart_id %>">
                     <button class="remove-btn" data-id="<%= item.book_id %>">삭제</button>
+                    </a>
                   </div>
                 </div>
             </div>
@@ -61,6 +61,7 @@
 
           <p>
             <strong id="final-cost">최종 결제 금액: 0원</strong>
+            <strong id="get-point">적립 포인트: 0P</strong>
           </p>
 
           <button class="checkout-btn">결제하기</button>

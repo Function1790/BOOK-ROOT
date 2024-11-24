@@ -1,0 +1,28 @@
+<% layout('layouts/layout') %>
+<link rel="stylesheet" href="/css/order-detail.css">
+
+<div class="container">
+  <h1>주문 상세 정보</h1>
+  
+  <div class="order-summary">
+    <p><strong>주문 번호:</strong> <%= order.order_id %></p>
+    <p><strong>주문 날짜:</strong> <%= new Date(order.created_at).toLocaleDateString() %></p>
+    <p><strong>총 금액:</strong> <%= order.total_price.toLocaleString() %>원</p>
+  </div>
+
+  <h2>주문한 상품</h2>
+  <div class="product-list">
+    <% order.item_data.forEach(item => { %>
+      <div class="product">
+          <div class="product-details">
+          <h3><%= item.title %></h3>
+          <p><strong>가격:</strong> <%= formatMoney(item.price) %>원</p>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+
+  <a href="<%= wasAdminPage? '/admin/orders' : '/order' %>" class="back-btn">
+    <%= wasAdminPage? '구매 현황 조회로 돌아가기' : '주문 목록으로 돌아가기' %>
+  </a>
+</div>

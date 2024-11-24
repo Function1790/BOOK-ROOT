@@ -4,18 +4,30 @@
     <div class="profile-card">
       <div class="profile-header">
         <img src="/img/icon/profile.png" alt="User Avatar" class="profile-avatar">
-        <h1 class="username"><%= user.username %></h1>
-        <p class="role">사용자 역할: <%= user.role %></p>
+        <h1 class="username">
+          <%= user.username %>
+        </h1>
+        <p class="role">사용자 역할: <%= user.role %>
+        </p>
       </div>
       <div class="profile-body">
         <div class="profile-info">
           <h2>프로필 정보</h2>
-          <p><strong>이메일:</strong> <%= user.email %> </p>
-          <p><strong>보유 금액:</strong> <%= formatMoney(user.money) %>원</p>
-          <p><strong>누적 포인트:</strong> <%= formatMoney(user.point) %>P</p>
+          <p><strong>이메일:</strong>
+            <%= user.email %>
+          </p>
+          <p><strong>보유 금액:</strong>
+            <%= formatMoney(user.money) %>원
+          </p>
+          <p><strong>누적 포인트:</strong>
+            <%= formatMoney(user.point) %>P
+          </p>
         </div>
         <div class="profile-actions">
           <!--button class="edit-btn"></-button-->
+          <a href="/order">
+            <button class="checkout-btn">주문내역</button>
+          </a>
           <a href="/logout">
             <button class="logout-btn">로그아웃</button>
           </a>

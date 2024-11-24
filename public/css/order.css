@@ -1,0 +1,78 @@
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 20px auto;
+  background: #fff;
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+  text-align: center;
+}
+
+p {
+  text-align: center;
+  font-size: 16px;
+  color: #777;
+}
+
+.order-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.order-table th, .order-table td {
+  padding: 12px 15px;
+  text-align: center;
+  border: 1px solid #ddd;
+}
+
+.order-table th {
+  background: #f4f4f4;
+  color: #333;
+  font-weight: bold;
+}
+
+.order-table tr:nth-child(even) {
+  background: #f9f9f9;
+}
+
+.order-table tr:hover {
+  background: #f1f1f1;
+}
+
+.details-btn {
+  padding: 8px 12px;
+  background: #0076ff;
+  color: #fff;
+  text-decoration: none;
+  border-radius: 4px;
+  font-size: 14px;
+}
+
+.details-btn:hover {
+  background: #005bb5;
+}
+
+.last {
+  width: 115px;
+}
+
+td.pending {
+  color: #f39c12;
+}
+
+td.completed {
+  color: #27ae60;
+}
+
+td.cancelled {
+  color: #e74c3c;
+}
+

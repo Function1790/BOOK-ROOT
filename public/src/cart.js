@@ -24,6 +24,7 @@ function updateCost() {
     }
   }
   costResult.innerText = "총 금액: " + toFormatPoint(total) + "원"
+  $('#get-point')[0].innerHTML = `적립 포인트: ${Math.floor(total*0.01)}P`;
 }
 
 for (var i = 0; i < checkBoxes.length; i++) {

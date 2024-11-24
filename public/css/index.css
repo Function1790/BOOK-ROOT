@@ -153,3 +153,21 @@ section h1 {
   background: #2a5298;
   color: #fff;
 }
+
+.rank-badge {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  background: #ff4757;
+  color: #fff;
+  font-size: 18px;
+  font-weight: bold;
+  padding: 12px 12px;
+  border-radius: 50%;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+  z-index: 5;
+}
+
+.book-card {
+  position: relative;
+}
